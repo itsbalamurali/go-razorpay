@@ -112,7 +112,7 @@ func New(APIKey string, apiSecret string) *RazorPay {
 
 //PaymentLink payment link request json data structure
 type PaymentLink struct {
-	Customer 	Customer 	  `json:"customer"`
+	Customer 	Cust	 	  `json:"customer"`
 	Type        string        `json:"type"`
 	ViewLess    int           `json:"view_less"`
 	Amount      int           `json:"amount"`
@@ -127,7 +127,7 @@ type PaymentLink struct {
 	Notes		[]interface{} `json:"notes,omitempty"`
 }
 
-type Customer struct {
+type Cust struct {
 	Name    string `json:"name"`
 	Email   string `json:"email"`
 	Contact string `json:"contact"`
@@ -194,6 +194,45 @@ type Data struct {
 	Amount	int	`json:"amount"`
 }
 
+type Customer struct {
+	ID         string            `json:"id"`
+	Entity     string            `json:"entity"`
+	Name       string            `json:"name"`
+	Email      string            `json:"email"`
+	Contact    string            `json:"contact"`
+	Notes	   map[string]string `json:"notes,omitempty"`
+	CreatedAt  int           	 `json:"created_at"`
+}
+
+type Customers struct {
+	Entity string     `json:"entity"`
+	Count  int        `json:"count"`
+	Items  []Customer `json:"items"`
+}
+
+type CustomerInput struct {
+	Name       string            `json:"name"`
+	Email      string            `json:"email"`
+	Contact    string            `json:"contact"`
+	Notes	   map[string]string `json:"notes,omitempty"`
+}
+
+type Settlement struct{
+	ID         string        `json:"id"`
+	Entity     string        `json:"entity"`
+	Amount	   int	         `json:"amount"`
+	Status     string        `json:"status"`
+	Fees       int           `json:"fees"` 
+	Tax        int           `json:"tax"`
+	Utr		   string	     `json:"utr"`
+	CreatedAt  int			 `json:"created_at"`	
+}
+
+type Settlements struct{
+	Entity string       `json:"entity"`
+	Count  int          `json:"count"`
+	Items  []Settlement `json:"items"`
+}
 
 func (r *RazorPay) call(operation string, reqbody []byte, pathparams string, queryparams map[string]string) ([]byte, error) {
 	var rurl string
@@ -231,7 +270,7 @@ func (r *RazorPay) call(operation string, reqbody []byte, pathparams string, que
 		rurl = APIURL + "payments/"
 	case "CreateRefund":
 		rmethod = "POST"
-        rurl = APIURL + "payments/" + pathparams
+    rurl = APIURL + "payments/" + pathparams
 	case "GetRefunds":
 		rmethod = "GET"
 		rurl = APIURL + "refunds/"
@@ -241,6 +280,24 @@ func (r *RazorPay) call(operation string, reqbody []byte, pathparams string, que
 	case "GetRefundByID":
 		rmethod = "GET"
 		rurl = APIURL + "refunds/" + pathparams
+	case "CreateCustomer":
+		rmethod = "POST"
+		rurl = APIURL + "customers"
+	case "EditCustomerByID":
+		rmethod = "PUT"
+		rurl = APIURL + "customers/" + pathparams
+	case "GetCustomerByID":
+		rmethod = "GET"
+		rurl = APIURL + "customers/" + pathparams
+	case "GetCustomers":
+		rmethod = "GET"
+		rurl = APIURL + "customers"
+	case "GetSettlements":
+		rmethod = "GET"
+		rurl = APIURL + "settlements"
+	case "GetSettlementByID":
+		rmethod = "GET"
+		rurl = APIURL + "settlements/" + pathparams	
 	default:
 		err := errors.New("Invalid Method/Operation")
 		return nil, err
