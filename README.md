@@ -4,7 +4,7 @@ The Razorpay Payment Gateway enables you to accept payments via debit card, cred
 
 Currently only supports few operations like payments, orders and refunds and rest are easy to implement (PR's are welcome).
 
-I know that this library could be structed / designed in a better way but the current design serves the purpose of our internal projects.
+I know that this library could be structured / designed in a better way but the current design satisfies the purpose in our internal projects.
 
 ## Installation
 
